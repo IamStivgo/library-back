@@ -1,0 +1,14 @@
+export enum ErrorCode {
+    BAD_MESSAGE = 'BAD_MESSAGE',
+    REPOSITORY_ERROR = 'REPOSITORY_ERROR',
+    NOT_FOUND = 'NOT_FOUND',
+    VALIDATION_ERROR = 'VALIDATION_ERROR',
+}
+
+export enum StatusCode {
+    OK = 200,
+    CREATED = 201,
+    NOT_FOUND = 404,
+    BAD_REQUEST = 400,
+    INTERNAL_ERROR = 500,
+}
