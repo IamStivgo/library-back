@@ -5,23 +5,13 @@ FROM node:16-alpine AS builder
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci
-
+RUN npm install
 COPY . .
 RUN npm run build
-
 FROM node:16-alpine
-
 WORKDIR /app
-
 COPY package*.json ./
-RUN npm ci --only=production
-
+RUN npm install --only=production
 COPY --from=builder /app/dist ./dist
-
-ENV NODE_ENV=production
-ENV PORT=5000
-
-EXPOSE 5000
-
-CMD ["node", "dist/infrastructure/api/Server.js"]
+EXPOSE 3000
+CMD ["node", "dist/index.js"]
