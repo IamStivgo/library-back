@@ -1,4 +1,4 @@
-import { Exception } from '@domain/exceptions';
+import { Exception, AppError } from '@domain/exceptions';
 
 export interface Response<T> {
     success: boolean;
@@ -19,5 +19,25 @@ export class Result {
 
     static failure<E = Exception>(exception: E): E {
         throw exception;
+    }
+}
+
+export class ServiceResult<T> {
+    public readonly isSuccess: boolean;
+    public readonly value?: T;
+    public readonly error?: AppError;
+
+    private constructor(isSuccess: boolean, value?: T, error?: AppError) {
+        this.isSuccess = isSuccess;
+        this.value = value;
+        this.error = error;
+    }
+
+    static ok<T>(value: T): ServiceResult<T> {
+        return new ServiceResult<T>(true, value, undefined);
+    }
+
+    static fail<T>(error: AppError): ServiceResult<T> {
+        return new ServiceResult<T>(false, undefined, error);
     }
 }

@@ -4,13 +4,16 @@ dotenv.config();
 import { application } from './Application';
 import { createDependencyContainer } from '@configuration';
 import { validateEnvs, ENVS } from '@util';
-import { testConnection } from '@infrastructure/database';
+import { testConnection, migrationRunner } from '@infrastructure/database';
 
 const start = async () => {
     try {
         validateEnvs();
 
         await testConnection();
+
+        // Run database migrations
+        await migrationRunner.runMigrations();
 
         createDependencyContainer();
 

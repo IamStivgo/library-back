@@ -1,0 +1,21 @@
+#!/bin/bash
+# Quick reference guide for database migrations
+
+echo "📚 Migration System - Quick Guide"
+echo ""
+echo "🔧 AVAILABLE COMMANDS:"
+echo "  npm run migrate:status    - View migration status"
+echo "  npm run migrate:run       - Execute pending migrations"
+echo "  npm run migrate:rollback  - Rollback last migration"
+echo ""
+echo "📝 CREATE NEW MIGRATION:"
+echo "  1. Create file: migrations/XXX_description.sql"
+echo "  2. Write SQL with IF NOT EXISTS"
+echo "  3. Restart server (executes automatically)"
+echo ""
+echo "✅ AUTOMATIC MIGRATIONS:"
+echo "  • Execute on startup: npm run dev / npm start"
+echo "  • Execute in alphabetical order"
+echo "  • Only execute once per file"
+echo ""
+echo "📖 For more information: cat MIGRATIONS.md"

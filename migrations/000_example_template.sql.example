@@ -1,0 +1,39 @@
+-- Example: Add book cover and tags support
+-- This is a template for creating new migrations
+
+-- Add cover URL to books
+ALTER TABLE books 
+ADD COLUMN IF NOT EXISTS cover_url VARCHAR(500);
+
+-- Create tags table
+CREATE TABLE IF NOT EXISTS tags (
+    id VARCHAR(36) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE,
+    color VARCHAR(7) DEFAULT '#3B82F6',
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create book-tags junction table (many-to-many)
+CREATE TABLE IF NOT EXISTS book_tags (
+    book_id VARCHAR(36) NOT NULL,
+    tag_id VARCHAR(36) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (book_id, tag_id),
+    FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE,
+    FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
+);
+
+-- Create indexes for better performance
+CREATE INDEX IF NOT EXISTS idx_book_tags_book ON book_tags(book_id);
+CREATE INDEX IF NOT EXISTS idx_book_tags_tag ON book_tags(tag_id);
+CREATE INDEX IF NOT EXISTS idx_tags_name ON tags(name);
+
+-- Seed some example tags
+INSERT INTO tags (id, name, color) VALUES 
+    ('tag-1', 'Fiction', '#3B82F6'),
+    ('tag-2', 'Non-Fiction', '#10B981'),
+    ('tag-3', 'Science', '#8B5CF6'),
+    ('tag-4', 'History', '#F59E0B'),
+    ('tag-5', 'Biography', '#EF4444')
+ON CONFLICT (name) DO NOTHING;

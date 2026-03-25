@@ -17,7 +17,6 @@ export class UpdateBookService {
             throw new NotFoundException(`Book with ID ${id} not found`);
         }
 
-        // Solo actualizar campos editables, excluir campos del sistema
         const updates: Partial<BookEntity> = {};
 
         if (dto.title !== undefined) updates.title = dto.title;
@@ -28,7 +27,6 @@ export class UpdateBookService {
         if (dto.genre !== undefined) updates.genre = dto.genre;
         if (dto.description !== undefined) updates.description = dto.description;
 
-        // Agregar timestamp de actualización
         updates.updatedAt = new Date();
 
         await this.repository.update(id, updates);

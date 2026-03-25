@@ -212,8 +212,8 @@ POST /api/books/:id/checkout
 Content-Type: application/json
 
 {
-  "borrowerName": "Juan Pérez",
-  "borrowerEmail": "juan@example.com",
+  "borrowerName": "John Smith",
+  "borrowerEmail": "john@example.com",
   "dueDate": "2024-04-24T10:00:00.000Z"
 }
 ```

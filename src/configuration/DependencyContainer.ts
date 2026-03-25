@@ -3,6 +3,11 @@ import { TYPES } from './Types';
 import { pool } from '@infrastructure/database';
 import { Pool } from 'pg';
 import { BookPostgresRepository } from '@infrastructure/repositories/postgres/BookPostgresRepository';
+import { UserPostgresRepository } from '@infrastructure/repositories/postgres/UserPostgresRepository';
+import { AuthPostgresRepository } from '@infrastructure/repositories/postgres/AuthPostgresRepository';
+import { RolePostgresRepository } from '@infrastructure/repositories/postgres/RolePostgresRepository';
+import { AuditLogPostgresRepository } from '@infrastructure/repositories/postgres/AuditLogPostgresRepository';
+import { LoanHistoryPostgresRepository } from '@infrastructure/repositories/postgres/LoanHistoryPostgresRepository';
 import { CreateBookService } from '@application/services/CreateBook.service';
 import { GetAllBooksService } from '@application/services/GetAllBooks.service';
 import { GetBookByIdService } from '@application/services/GetBookById.service';
@@ -11,12 +16,36 @@ import { DeleteBookService } from '@application/services/DeleteBook.service';
 import { CheckOutBookService } from '@application/services/CheckOutBook.service';
 import { CheckInBookService } from '@application/services/CheckInBook.service';
 import { SearchBooksService } from '@application/services/SearchBooks.service';
+import { RenewBookService } from '@application/services/RenewBook.service';
+import { GetLoanHistoryService } from '@application/services/GetLoanHistory.service';
+import { LoginService } from '@application/services/Login.service';
+import { RegisterService } from '@application/services/Register.service';
+import { GoogleAuthLoginService } from '@application/services/GoogleAuthLogin.service';
+import { MicrosoftAuthLoginService } from '@application/services/MicrosoftAuthLogin.service';
+import { GitHubAuthLoginService } from '@application/services/GitHubAuthLogin.service';
+import { RefreshTokenService } from '@application/services/RefreshToken.service';
+import { LogoutService } from '@application/services/Logout.service';
+import { AIChatService } from '@application/services/AIChat.service';
+import { AIRecommendationsService } from '@application/services/AIRecommendations.service';
+import { AIBookSummaryService } from '@application/services/AIBookSummary.service';
+import { AICollectionAnalysisService } from '@application/services/AICollectionAnalysis.service';
+import { AISemanticSearchService } from '@application/services/AISemanticSearch.service';
+import { AIReadingTrendsService } from '@application/services/AIReadingTrends.service';
+import { AIGenerateDescriptionService } from '@application/services/AIGenerateDescription.service';
+import { AISmartNotificationService } from '@application/services/AISmartNotification.service';
+import { AuditService } from '@application/services/Audit.service';
+import { GetAuditLogsService } from '@application/services/GetAuditLogs.service';
 
 export const DEPENDENCY_CONTAINER = new Container();
 
 export const createDependencyContainer = (): void => {
     DEPENDENCY_CONTAINER.bind<Pool>(TYPES.Database).toConstantValue(pool);
     DEPENDENCY_CONTAINER.bind(TYPES.BookRepository).to(BookPostgresRepository).inSingletonScope();
+    DEPENDENCY_CONTAINER.bind(TYPES.UserRepository).to(UserPostgresRepository).inSingletonScope();
+    DEPENDENCY_CONTAINER.bind(TYPES.AuthRepository).to(AuthPostgresRepository).inSingletonScope();
+    DEPENDENCY_CONTAINER.bind(TYPES.RoleRepository).to(RolePostgresRepository).inSingletonScope();
+    DEPENDENCY_CONTAINER.bind(TYPES.AuditLogRepository).to(AuditLogPostgresRepository).inSingletonScope();
+    DEPENDENCY_CONTAINER.bind(TYPES.LoanHistoryRepository).to(LoanHistoryPostgresRepository).inSingletonScope();
 
     DEPENDENCY_CONTAINER.bind(CreateBookService).toSelf().inSingletonScope();
     DEPENDENCY_CONTAINER.bind(GetAllBooksService).toSelf().inSingletonScope();
@@ -26,4 +55,26 @@ export const createDependencyContainer = (): void => {
     DEPENDENCY_CONTAINER.bind(CheckOutBookService).toSelf().inSingletonScope();
     DEPENDENCY_CONTAINER.bind(CheckInBookService).toSelf().inSingletonScope();
     DEPENDENCY_CONTAINER.bind(SearchBooksService).toSelf().inSingletonScope();
+    DEPENDENCY_CONTAINER.bind(RenewBookService).toSelf().inSingletonScope();
+    DEPENDENCY_CONTAINER.bind(GetLoanHistoryService).toSelf().inSingletonScope();
+
+    DEPENDENCY_CONTAINER.bind(LoginService).toSelf().inSingletonScope();
+    DEPENDENCY_CONTAINER.bind(RegisterService).toSelf().inSingletonScope();
+    DEPENDENCY_CONTAINER.bind(GoogleAuthLoginService).toSelf().inSingletonScope();
+    DEPENDENCY_CONTAINER.bind(MicrosoftAuthLoginService).toSelf().inSingletonScope();
+    DEPENDENCY_CONTAINER.bind(GitHubAuthLoginService).toSelf().inSingletonScope();
+    DEPENDENCY_CONTAINER.bind(RefreshTokenService).toSelf().inSingletonScope();
+    DEPENDENCY_CONTAINER.bind(LogoutService).toSelf().inSingletonScope();
+
+    DEPENDENCY_CONTAINER.bind(AIChatService).toSelf().inSingletonScope();
+    DEPENDENCY_CONTAINER.bind(AIRecommendationsService).toSelf().inSingletonScope();
+    DEPENDENCY_CONTAINER.bind(AIBookSummaryService).toSelf().inSingletonScope();
+    DEPENDENCY_CONTAINER.bind(AICollectionAnalysisService).toSelf().inSingletonScope();
+    DEPENDENCY_CONTAINER.bind(AISemanticSearchService).toSelf().inSingletonScope();
+    DEPENDENCY_CONTAINER.bind(AIReadingTrendsService).toSelf().inSingletonScope();
+    DEPENDENCY_CONTAINER.bind(AIGenerateDescriptionService).toSelf().inSingletonScope();
+    DEPENDENCY_CONTAINER.bind(AISmartNotificationService).toSelf().inSingletonScope();
+
+    DEPENDENCY_CONTAINER.bind(AuditService).toSelf().inSingletonScope();
+    DEPENDENCY_CONTAINER.bind(GetAuditLogsService).toSelf().inSingletonScope();
 };
