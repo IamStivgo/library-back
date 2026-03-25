@@ -9,8 +9,16 @@ export const middlewares = async (application: FastifyInstance): Promise<void> =
         contentSecurityPolicy: false,
     });
 
+    const allowedOrigins = ENVS.CORS_ORIGIN.split(',').map(origin => origin.trim());
+
     await application.register(cors, {
-        origin: ENVS.CORS_ORIGIN,
+        origin: (origin, callback) => {
+            if (!origin || allowedOrigins.includes('*') || allowedOrigins.some(allowed => origin.includes(allowed) || allowed === origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed by CORS'), false);
+            }
+        },
         credentials: true,
     });
 
