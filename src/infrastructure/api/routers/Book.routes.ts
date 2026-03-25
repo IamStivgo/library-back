@@ -11,6 +11,8 @@ import {
     CheckOutBookService,
     CheckInBookService,
     SearchBooksService,
+    RenewBookService,
+    GetLoanHistoryService,
 } from '@application/services';
 import { CreateBookInputModel, UpdateBookInputModel, CheckOutBookInputModel } from '@application/dto';
 
@@ -81,5 +83,32 @@ export const searchBooksRoute = async (
     const query = req.query.q || '';
     const service = DEPENDENCY_CONTAINER.get(SearchBooksService);
     const result = await service.execute(query);
+    return reply.status(200).send(result);
+};
+
+export const renewBookRoute = async (
+    req: FastifyRequest<{ Params: { id: string }; Body: { dueDate: string } }>,
+    reply: FastifyReply,
+): Promise<FastifyReply | void> => {
+    const { dueDate } = req.body;
+    if (!dueDate) {
+        return reply.status(400).send({
+            success: false,
+            message: 'Due date is required',
+            code: 'VALIDATION_ERROR',
+        });
+    }
+    const service = DEPENDENCY_CONTAINER.get(RenewBookService);
+    const result = await service.execute(req.params.id, dueDate);
+    return reply.status(200).send(result);
+};
+
+export const getLoanHistoryRoute = async (
+    req: FastifyRequest<{ Querystring: { email?: string } }>,
+    reply: FastifyReply,
+): Promise<FastifyReply | void> => {
+    const email = req.query.email;
+    const service = DEPENDENCY_CONTAINER.get(GetLoanHistoryService);
+    const result = await service.execute(email);
     return reply.status(200).send(result);
 };

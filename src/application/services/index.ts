@@ -6,3 +6,5 @@ export * from './DeleteBook.service';
 export * from './CheckOutBook.service';
 export * from './CheckInBook.service';
 export * from './SearchBooks.service';
+export * from './RenewBook.service';
+export * from './GetLoanHistory.service';

@@ -1,7 +1,8 @@
 import { CheckOutBookInputModel } from '@application/dto';
-import { DEPENDENCY_CONTAINER, TYPES } from '@configuration';
-import { BookRepository } from '@domain/repository';
-import { BookEntity, BookStatus } from '@domain/entities';
+import { DEPENDENCY_CONTAINER } from '../../configuration/DependencyContainer';
+import { TYPES } from '../../configuration/Types';
+import { BookRepository, LoanHistoryRepository } from '@domain/repository';
+import { BookEntity, BookStatus, LoanStatus } from '@domain/entities';
 import { Response, Result } from '@domain/response';
 import { NotFoundException, BadMessageException } from '@domain/exceptions';
 import { injectable } from 'inversify';
@@ -9,6 +10,7 @@ import { injectable } from 'inversify';
 @injectable()
 export class CheckOutBookService {
     private repository = DEPENDENCY_CONTAINER.get<BookRepository>(TYPES.BookRepository);
+    private loanHistoryRepository = DEPENDENCY_CONTAINER.get<LoanHistoryRepository>(TYPES.LoanHistoryRepository);
 
     async execute(id: string, dto: CheckOutBookInputModel): Promise<Response<BookEntity>> {
         const book = await this.repository.findById(id);
@@ -31,6 +33,20 @@ export class CheckOutBookService {
         };
 
         await this.repository.update(id, updates);
+
+        // Create loan history record
+        await this.loanHistoryRepository.create({
+            bookId: id,
+            bookTitle: book.title,
+            bookAuthor: book.author,
+            bookIsbn: book.isbn,
+            borrowerName: dto.borrowerName,
+            borrowerEmail: dto.borrowerEmail,
+            checkoutDate: new Date(),
+            dueDate: new Date(dto.dueDate),
+            status: LoanStatus.ACTIVE,
+            renewedCount: 0,
+        });
 
         const updatedBook = await this.repository.findById(id);
         return Result.ok(updatedBook!, `Book "${book.title}" checked out successfully`);

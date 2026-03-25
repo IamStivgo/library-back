@@ -45,3 +45,21 @@ export class DatabaseException extends Exception {
         super(message, ErrorCode.REPOSITORY_ERROR, StatusCode.INTERNAL_ERROR, cause);
     }
 }
+
+export class AppError extends Exception {
+    constructor(code: ErrorCode, message: string, cause?: string) {
+        const statusCodeMap: Record<ErrorCode, number> = {
+            [ErrorCode.BAD_MESSAGE]: StatusCode.BAD_REQUEST,
+            [ErrorCode.BAD_REQUEST]: StatusCode.BAD_REQUEST,
+            [ErrorCode.NOT_FOUND]: StatusCode.NOT_FOUND,
+            [ErrorCode.VALIDATION_ERROR]: StatusCode.BAD_REQUEST,
+            [ErrorCode.UNAUTHORIZED]: StatusCode.UNAUTHORIZED,
+            [ErrorCode.FORBIDDEN]: StatusCode.FORBIDDEN,
+            [ErrorCode.DUPLICATE_RESOURCE]: StatusCode.BAD_REQUEST,
+            [ErrorCode.REPOSITORY_ERROR]: StatusCode.INTERNAL_ERROR,
+            [ErrorCode.INTERNAL_ERROR]: StatusCode.INTERNAL_ERROR,
+        };
+
+        super(message, code, statusCodeMap[code] || StatusCode.INTERNAL_ERROR, cause);
+    }
+}
